@@ -1,0 +1,107 @@
+@import 'tailwindcss';
+
+/* Design tokens. Tailwind turns these into utilities such as bg-ink, text-gold. */
+@theme {
+  --color-ink: #111318;
+  --color-surface: #20232c;
+  --color-surface-raised: #2a2e39;
+  --color-gold: #d9a441;
+  --color-gold-soft: #ecc274;
+  --color-cream: #f4f0e8;
+  --color-muted: #9b9ea8;
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Outfit', 'Inter', sans-serif;
+
+  --animate-shimmer: shimmer 1.6s ease-in-out infinite;
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--color-ink);
+  }
+
+  body {
+    @apply bg-ink font-sans text-cream antialiased;
+    min-height: 100vh;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display tracking-tight;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-gold) 35%, transparent);
+  }
+
+  /* Slim, dark scrollbars to match the theme. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #3a3f4d transparent;
+  }
+
+  button:not(:disabled),
+  [role='button'] {
+    cursor: pointer;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+  }
+}
+
+/* Reusable building blocks. In Tailwind v4 these are declared with @utility so
+   they can be combined with variants such as hover: and md:. */
+
+/* Loading placeholder with a moving highlight. */
+@utility skeleton {
+  @apply animate-shimmer rounded-lg;
+  background-image: linear-gradient(
+    90deg,
+    var(--color-surface) 0%,
+    var(--color-surface-raised) 50%,
+    var(--color-surface) 100%
+  );
+  background-size: 200% 100%;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition duration-200 disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+@utility btn-primary {
+  @apply btn bg-gold text-ink hover:bg-gold-soft;
+}
+
+@utility btn-ghost {
+  @apply btn border border-white/15 bg-white/5 text-cream backdrop-blur hover:border-white/30 hover:bg-white/10;
+}
+
+@utility input {
+  @apply w-full rounded-xl border border-white/10 bg-surface px-4 py-3 text-sm text-cream placeholder:text-muted transition focus:border-gold/70 focus:outline-none focus:ring-2 focus:ring-gold/20;
+}
+
+@utility container-page {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
